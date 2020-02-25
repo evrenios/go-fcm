@@ -7,54 +7,54 @@ import (
 
 var (
 	// ErrMissingRegistration occurs if registration token is not set.
-	ErrMissingRegistration = errors.New("missing registration token")
+	ErrMissingRegistration = errors.New("MissingRegistration")
 
 	// ErrInvalidRegistration occurs if registration token is invalid.
-	ErrInvalidRegistration = errors.New("invalid registration token")
+	ErrInvalidRegistration = errors.New("InvalidRegistration")
 
 	// ErrNotRegistered occurs when application was deleted from device and
 	// token is not registered in FCM.
-	ErrNotRegistered = errors.New("unregistered device")
+	ErrNotRegistered = errors.New("NotRegistered")
 
 	// ErrInvalidPackageName occurs if package name in message is invalid.
-	ErrInvalidPackageName = errors.New("invalid package name")
+	ErrInvalidPackageName = errors.New("InvalidPackageName")
 
 	// ErrMismatchSenderID occurs when application has a new registration token.
-	ErrMismatchSenderID = errors.New("mismatched sender id")
+	ErrMismatchSenderID = errors.New("MismatchSenderID")
 
 	// ErrMessageTooBig occurs when message is too big.
-	ErrMessageTooBig = errors.New("message is too big")
+	ErrMessageTooBig = errors.New("MessageTooBig")
 
 	// ErrInvalidDataKey occurs if data key is invalid.
-	ErrInvalidDataKey = errors.New("invalid data key")
+	ErrInvalidDataKey = errors.New("InvalidDataKey")
 
 	// ErrInvalidTTL occurs when message has invalid TTL.
-	ErrInvalidTTL = errors.New("invalid time to live")
+	ErrInvalidTTL = errors.New("InvalidTTL")
 
 	// ErrUnavailable occurs when FCM service is unavailable. It makes sense
 	// to retry after this error.
-	ErrUnavailable = connectionError("timeout")
+	ErrUnavailable = connectionError("Unavailable")
 
 	// ErrInternalServerError is internal FCM error. It makes sense to retry
 	// after this error.
-	ErrInternalServerError = serverError("internal server error")
+	ErrInternalServerError = serverError("InternalServerError")
 
 	// ErrDeviceMessageRateExceeded occurs when client sent to many requests to
 	// the device.
-	ErrDeviceMessageRateExceeded = errors.New("device message rate exceeded")
+	ErrDeviceMessageRateExceeded = errors.New("DeviceMessageRateExceeded")
 
 	// ErrTopicsMessageRateExceeded occurs when client sent to many requests to
 	// the topics.
-	ErrTopicsMessageRateExceeded = errors.New("topics message rate exceeded")
+	ErrTopicsMessageRateExceeded = errors.New("TopicsMessageRateExceeded")
 
 	// ErrInvalidParameters occurs when provided parameters have the right name and type
-	ErrInvalidParameters = errors.New("check that the provided parameters have the right name and type")
+	ErrInvalidParameters = errors.New("InvalidParameters")
 
 	// ErrUnknown for unknown error type
-	ErrUnknown = errors.New("unknown error type")
+	ErrUnknown = errors.New("Unknown")
 
 	// ErrInvalidApnsCredential for Invalid APNs credentials
-	ErrInvalidApnsCredential = errors.New("invalid APNs credentials")
+	ErrInvalidApnsCredential = errors.New("InvalidApnsCredential")
 )
 
 var (
@@ -155,7 +155,9 @@ func (r *Response) UnmarshalJSON(data []byte) error {
 	r.FailedRegistrationIDs = response.FailedRegistrationIDs
 	r.MessageID = response.MessageID
 	if response.Error != "" {
-		if _, ok := errMap[response.Error]; !ok {
+		if val, ok := errMap[response.Error]; ok {
+			r.Error = val
+		} else {
 			r.Error = ErrUnknown
 		}
 	}
@@ -185,10 +187,13 @@ func (r *Result) UnmarshalJSON(data []byte) error {
 	r.MessageID = result.MessageID
 	r.RegistrationID = result.RegistrationID
 	if result.Error != "" {
-		if _, ok := errMap[result.Error]; !ok {
+		if val, ok := errMap[result.Error]; ok {
+			r.Error = val
+		} else {
 			r.Error = ErrUnknown
 		}
 	}
+
 	return nil
 }
 
