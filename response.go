@@ -185,13 +185,10 @@ func (r *Result) UnmarshalJSON(data []byte) error {
 	r.MessageID = result.MessageID
 	r.RegistrationID = result.RegistrationID
 	if result.Error != "" {
-		if val, ok := errMap[result.Error]; ok {
-			r.Error = val
-		} else {
+		if _, ok := errMap[result.Error]; !ok {
 			r.Error = ErrUnknown
 		}
 	}
-
 	return nil
 }
 
