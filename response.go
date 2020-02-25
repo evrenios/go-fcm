@@ -155,9 +155,7 @@ func (r *Response) UnmarshalJSON(data []byte) error {
 	r.FailedRegistrationIDs = response.FailedRegistrationIDs
 	r.MessageID = response.MessageID
 	if response.Error != "" {
-		if val, ok := errMap[response.Error]; ok {
-			r.Error = val
-		} else {
+		if _, ok := errMap[response.Error]; !ok {
 			r.Error = ErrUnknown
 		}
 	}
