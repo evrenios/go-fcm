@@ -20,7 +20,7 @@ var (
 	ErrInvalidPackageName = errors.New("InvalidPackageName")
 
 	// ErrMismatchSenderID occurs when application has a new registration token.
-	ErrMismatchSenderID = errors.New("MismatchSenderID")
+	ErrMismatchSenderID = errors.New("MismatchSenderId")
 
 	// ErrMessageTooBig occurs when message is too big.
 	ErrMessageTooBig = errors.New("MessageTooBig")
